@@ -20,8 +20,10 @@ public class BallSummary {
 
     @Column(name="outcomeOfBall")
     String outcomeOfBall;
+
     @Column(name="currentOver")
     int currentOver;
+
     @ManyToOne
     @JoinColumn(name="matchId",referencedColumnName = "matchId",nullable = false)
     private Matches matches;
@@ -31,12 +33,4 @@ public class BallSummary {
     private Innings inning;
 
 
-
-
-
-
-    //matchId integer
-    //inningsId integer [primary key]
-
-    //currentOver integer [primary key]
 }

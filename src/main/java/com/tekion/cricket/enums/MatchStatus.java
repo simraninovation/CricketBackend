@@ -1,7 +1,7 @@
 package com.tekion.cricket.enums;
 
 public enum MatchStatus {
-    notStartedYet,
-    running,
-    completed
+    NOT_STARTED_YET,
+    RUNNING,
+    COMPLETED
 }

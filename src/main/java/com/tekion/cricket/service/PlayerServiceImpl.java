@@ -13,11 +13,10 @@ import java.util.Optional;
 public   class PlayerServiceImpl implements PlayerService{
     @Autowired
     private PlayerRepository playerRepository;
-    List<Players> listOfPlayers = new ArrayList<Players>();
     @Override
     public List<Players> getTeamPlayer(Long teamId) {
 
-         listOfPlayers = playerRepository.findPlayerByTeamTeamId(teamId);
+        List<Players> listOfPlayers = playerRepository.findPlayerByTeamTeamId(teamId);
          return  listOfPlayers;
     }
     @Override
@@ -25,7 +24,6 @@ public   class PlayerServiceImpl implements PlayerService{
 
         return playerRepository.save(player);
     }
-
     @Override
     public List<Players> getAllPlayer() {
         return playerRepository.findAll();

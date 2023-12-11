@@ -1,123 +1,188 @@
 package com.tekion.cricket.service;
 
 import com.tekion.cricket.dto.matchrequest.MatchResultDto;
+import com.tekion.cricket.dto.matchrequest.MatchScoreDto;
 import com.tekion.cricket.dto.matchrequest.NewMatchDto;
 import com.tekion.cricket.entity.*;
-import com.tekion.cricket.repository.MatchesRepository;
-import com.tekion.cricket.repository.TeamRepository;
+import com.tekion.cricket.repository.*;
+import com.tekion.cricket.utils.ScorecardGenerator;
+import com.tekion.cricket.utils.TossUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
 
+@Slf4j
 @Service
 public class MatchesServiceImpl implements MatchesService{
     @Autowired
     private MatchesRepository matchesRepository;
     @Autowired
     private TeamRepository teamRepository;
-//    @Autowired
-//    private TossService tossService;
-
+    @Autowired
+    private InningsRepository inningsRepository;
+    @Autowired
+    private TossRepository tossRepository;
+    @Autowired
+    private PlayerStatsRepository playerStatsRepository;
+    @Autowired
+    private BallSummaryRepository ballSummaryRepository;
 
     @Override
     public void save(Matches matches) {
         matchesRepository.save(matches);
     }
 
-    public static Map<String, Object> playInnings(Team teamA, Team teamB, int oversForAMatch, Long matchId){
-        InningsDetails inningsDetails = new InningsDetails();
-        List<Object> result = new ArrayList<>();
+    public static Map<String, Object> playInnings(Team teamA, Team teamB, int oversForAMatch, Long targetScore) throws InterruptedException {
+        Innings inningsDetails = new Innings();
         Map<String, Object> response = new HashMap<>();
-        int wicket = 0;
-        int event = 0;
-        int totalScores = 0;
-        int runs = 0;
-        int ballsPerOver = 0;
-        int oversPerRun = 0;
-        int ballNo = 1;
-        int over = 1;
-        String ballStats ="";
-        List<BallSummary> ballDetailsList = new ArrayList<>();
-        List<PlayerStats> playerDetails = new ArrayList<>();
+        List<BallSummary> ballSummaries = new ArrayList<>();
+        List<PlayerStats> playerStats = new ArrayList<>();
 
-        Long totalBalls = 0L;
-        Long totalRuns = 0L;
+        MatchScoreDto matchSocreDto = ScorecardGenerator.battingStats(oversForAMatch,teamA, ballSummaries, playerStats,targetScore);
 
+        ScorecardGenerator.bowlingStats(oversForAMatch,teamB,matchSocreDto,playerStats);
 
-        for (int overs = 1; over <= oversForAMatch; over++) {
-            BallSummary ballDetail = new BallSummary();
-            ballDetail.setCurrentOver(over);
-
-            for (int ball = 1; ball <= 6; ball++) {
-                totalBalls++;
-                ballsPerOver++;
-                List<PlayerStats> playerDetails1 = new ArrayList<>();
-                for (Players batsman : teamA.getPlayers()) {
-                    playerDetails1.setId(batsman.getId);
-                    String eve = ScoreGenerator.getRandomScore();
-                    if (wicket < 10) {
-                        playerDetails1.setRunScored(runs);
-                        playerDetaisl1.set(runs);
-                        if (eve.equals("W")) {
-                            batsman.addRuns(runs);
-                            ballDetails.add(-1);
-                            runs = 0;
-                            wicket++;
-                            ballStats += "W ";
-                            playerDetails1 = new PlayerDetails();
-                        } else {
-                            event = Integer.parseInt(eve);
-                            if (wicket <= 10) {
-                                totalScores = totalScores + event;
-                                runs = runs + event;
-                                ballDetails.add(event);
-                                ballStats += (eve + " ");
-
-                            }
-                        }
-                        ballDetail.setCurrentOver(over);
-                        ballDetailsList.add(ballDetail);
-                        System.out.println("Total ballDetail: " + ballDetail);
-                        ballNo++;
-                    }
-                    else {
-                        break;
-                    }
-
-                }
-            }
-            ballDetailsList.setoutcomeOfBall(ballStats);
-            if (ballsPerOver == 6) {
-                oversPerRun++;
-                ballsPerOver = 0;
-            }
-            over++;
-        }
-
-    }
-
-    public static Map<String, Object> matchResult(Team teamA, Team teamB, int matchOvers, Long matchId) {
+        inningsDetails.setWicketsFallen((long) matchSocreDto.getWicket());
+        inningsDetails.setExtraRuns(0L);
+        inningsDetails.setTotalScore((long) matchSocreDto.getTotalScores());
+        inningsDetails.setBallingTeamId(teamB.getTeamId());
+        inningsDetails.setBattingTeamId(teamA.getTeamId());
+        inningsDetails.setNoOfNoBalls(0L);
+        inningsDetails.setNoOfWideBalls(0L);
+        inningsDetails.setInnStatus(1L);
+        response.put("inningsDetails",inningsDetails);
+        response.put("playerStats",playerStats);
+        response.put("ballSummaries",ballSummaries);
+        return response;
+    }public static Map<String, Object> matchResult(Team teamA, Team teamB, int matchOvers, Long matchId) throws InterruptedException {
         Map<String, Object> response = new HashMap<>();
-        Map<String, Object> innings = playInnings(teamA, teamB, overs, matchId);
+        Map<String, Object> innings = playInnings(teamA, teamB, matchOvers, matchId);
         response.put("inningsDetails", innings.get("inningsDetails"));
         response.put("overDetails", innings.get("overDetails"));
+        response.put("playerStats",innings.get("playerStats"));
+        response.put("ballSummaries",innings.get("ballSummaries"));
         return response;
     }
 
-
     @Override
-    public MatchResultDto playTheMatch(NewMatchDto request){
+    public MatchResultDto playTheMatch(NewMatchDto request) throws InterruptedException {
         MatchResultDto matchResultDto = new MatchResultDto();
-        Long matchId = matchResultDto.getMatchId();
-        Long team1 = matchResultDto.getTeamA();
-        Long team2 = matchResultDto.getTeamB();
-        int matchOvers = matchResultDto.getMatchOvers();
+        Long matchId = request.getMatchId();
+        Long team1 = request.getTeamA();
+        Long team2 = request.getTeamB();
+        int matchOvers = request.getMatchOvers();
         Optional<Team> teamA = teamRepository.findById(team1);
         Optional<Team> teamB = teamRepository.findById(team2);
-        Map<String, Object> res = matchResult(teamA.get(), teamA.get(), matchOvers, 1L);
-        Map<String, Object> res1 = matchResult(teamB.get(), teamB.get(), matchOvers, 2L);
+        log.info("{},{},{}",teamA.get().getTeamName()," v/s ",teamB.get().getTeamName());
 
+        Toss tossWinner = TossUtil.tossSetup(teamA.get(),teamB.get());
+
+        Map<String, Object> inning1res,inning2res;
+        log.info("------------------Inning1 has started--------------------");
+        if (tossWinner.getTeamIdWonToss() == teamA.get().getTeamId()) {
+            Team battingTeam = (tossWinner.getBattingTeamId() == teamA.get().getTeamId()) ? teamA.get() : teamB.get();
+            Team bowlingTeam = (tossWinner.getBattingTeamId() == teamA.get().getTeamId()) ? teamB.get() : teamA.get();
+
+            inning1res = matchResult(battingTeam, bowlingTeam, matchOvers, 0L);
+            Innings inning1 = (Innings) inning1res.get("inningsDetails");
+            inning2res = matchResult(bowlingTeam, battingTeam, matchOvers, inning1.getTotalScore() + 1);
+        } else {
+            Team battingTeam = (tossWinner.getBattingTeamId() == teamB.get().getTeamId()) ? teamB.get() : teamA.get();
+            Team bowlingTeam = (tossWinner.getBattingTeamId() == teamB.get().getTeamId()) ? teamA.get() : teamB.get();
+
+            inning1res = matchResult(battingTeam, bowlingTeam, matchOvers, 0L);
+            Innings inning1 = (Innings) inning1res.get("inningsDetails");
+            inning2res = matchResult(bowlingTeam, battingTeam, matchOvers, inning1.getTotalScore() + 1);
+        }
+
+        List<PlayerStats> teamAPlayerStats = (List<PlayerStats>) inning1res.get("playerStats");
+        List<PlayerStats> teamBPlayerStats = (List<PlayerStats>) inning2res.get("playerStats");
+
+        List<BallSummary> ballSummaryA = (List<BallSummary>) inning1res.get("ballSummaries");
+        List<BallSummary> ballSummaryB = (List<BallSummary>) inning2res.get("ballSummaries");
+
+        Innings firstInningsDetails = (Innings) inning1res.get("inningsDetails");
+        Innings secondInningsDetails = (Innings) inning2res.get("inningsDetails");
+        Matches matches = new Matches();
+
+        Long teamAResult = firstInningsDetails.getTotalScore();
+        Long teamBResult = secondInningsDetails.getTotalScore();
+
+        String result = Optional.of(teamAResult - teamBResult)
+                .filter(differences -> differences > 0)
+                .map(differences -> "Team " + teamA.get().getTeamName() + " Won the match by : " + differences + " runs")
+                .orElseGet(() -> teamAResult == teamBResult ? "Match Drawn!" : "Team " + teamB.get().getTeamName() + " Won the match by : " + Math.abs(10 - secondInningsDetails.getWicketsFallen()) + " wickets");
+
+        log.info("------------------Match Summary--------------------");
+
+        log.info("{}",result);
+
+            StringBuilder trophy = new StringBuilder();
+            trophy.append("        .-----.\n");
+            trophy.append("      .'        `.\n");
+            trophy.append("     /    .---.   \\\n");
+            trophy.append("    |    |   |    |\n");
+            trophy.append("     \\    `-'   /\n");
+            trophy.append("      '--------'\n");
+            trophy.append("       \\      /\n");
+            trophy.append("        `----'\n");
+            log.info("{}", trophy.toString());
+
+
+        matchResultDto.setMatchId(matchId);
+        matchResultDto.setTeamA(team1);
+        matchResultDto.setTeamB(team2);
+        if(teamAResult > teamBResult)
+            matchResultDto.setTeamIdWhoWonMatch(team1);
+        else
+            matchResultDto.setTeamIdWhoWonMatch(team2);
+        matchResultDto.setTeamIdWonToss(tossWinner.getTeamIdWonToss());
+
+        matches.setTeamA(teamA.get());
+        matches.setTeamB(teamB.get());
+        if(teamAResult > teamBResult)
+            matches.setTeamIdWhoWonMatch(team1);
+        else
+            matches.setTeamIdWhoWonMatch(team2);
+        matches.setTeamIdWonToss(tossWinner.getTeamIdWonToss());
+
+        Matches matchesRes = matchesRepository.save(matches);
+
+        firstInningsDetails.setMatches(matchesRes);
+        secondInningsDetails.setMatches(matchesRes);
+
+        Innings innings1 = inningsRepository.save(firstInningsDetails);
+        Innings innings2 = inningsRepository.save(secondInningsDetails);
+        for(PlayerStats playerStat : teamAPlayerStats){
+            playerStat.setMatches(matchesRes);
+        }
+
+        for(PlayerStats playerStat : teamBPlayerStats){
+            playerStat.setMatches(matchesRes);
+        }
+
+        for (BallSummary ballSummary : ballSummaryA){
+            ballSummary.setMatches(matchesRes);
+            ballSummary.setInning(innings1);
+        }
+
+        for (BallSummary ballSummary : ballSummaryB){
+            ballSummary.setMatches(matchesRes);
+            ballSummary.setInning(innings2);
+        }
+
+        ballSummaryRepository.saveAll(ballSummaryA);
+        ballSummaryRepository.saveAll(ballSummaryB);
+
+        playerStatsRepository.saveAll(teamAPlayerStats);
+        playerStatsRepository.saveAll(teamBPlayerStats);
+
+        Toss toss = tossRepository.save(tossWinner);
+        return matchResultDto;
     }
+
+
 
 }

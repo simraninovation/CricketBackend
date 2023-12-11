@@ -13,10 +13,8 @@ import java.util.List;
 @RestController
 @RequestMapping("/players")
 public class PlayerController {
-
     @Autowired
     private PlayerService playerService;
-
     @PostMapping("/createPlayer")
     public ResponseEntity<Players> savePlayerDetails(@RequestBody Players players){
         Players savedPlayer = playerService.save(players);
@@ -32,7 +30,6 @@ public class PlayerController {
         List<Players> playersDetails = playerService.getAllPlayer();
         return new ResponseEntity<>(playersDetails, HttpStatus.OK);
     }
-
     @GetMapping("/{teamId}/players")
     @ResponseBody
     public ResponseEntity<List<Players>> getTeamPlayer(@PathVariable  Long teamId){

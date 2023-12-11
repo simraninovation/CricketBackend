@@ -15,13 +15,13 @@ public class MatchesController {
     @Autowired
     private MatchesService matchesService;
     @PostMapping("/create")
-    public String  savePlayerDetails(@RequestBody Matches matches){
+    public ResponseEntity<String>  savematchDetails(@RequestBody Matches matches){
         matchesService.save(matches);
-        return "Scheduled Match";
+        return new ResponseEntity<>("Scheduled Match",HttpStatus.OK);
     }
 
-    @PostMapping("/playTheMatch")
-    public ResponseEntity<MatchResultDto> playTheMatch(@RequestBody NewMatchDto match){
+    @PostMapping("/play")
+    public ResponseEntity<MatchResultDto> playTheMatch(@RequestBody NewMatchDto match) throws InterruptedException{
         MatchResultDto matchResultDto = matchesService.playTheMatch(match);
         return new ResponseEntity<>(matchResultDto, HttpStatus.OK);
     }

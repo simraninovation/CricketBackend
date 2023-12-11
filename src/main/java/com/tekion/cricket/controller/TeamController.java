@@ -24,7 +24,6 @@ public class TeamController {
         Team savedTeam = teamService.save(team);
         return new ResponseEntity<>(savedTeam, HttpStatus.CREATED);
     }
-
     @GetMapping("/allTeams")
     public ResponseEntity<List<Team>> getAllTeams() {
         List<Team> teamsDetails = teamService.getAllTeams();
@@ -35,8 +34,6 @@ public class TeamController {
         List<Players> teamDetailSById = playerService.getSpecificTeamById(teamId);
         return new ResponseEntity<>(teamDetailSById, HttpStatus.OK);
     }
-
-
     @DeleteMapping("{id}")
     public ResponseEntity<String> deleteUser(@PathVariable("id") Long teamId) {
         teamService.deleteTeam(teamId);

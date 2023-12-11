@@ -21,20 +21,28 @@ public class PlayerStats {
 
     @Column(name="runScored ")
     int runScored ;
+
     @Column(name="runsGiven")
     int runsGiven;
+
     @Column(name="overIsbBowled ")
     int overIsBowled;
+
     @Column(name="ballIsBowled")
     int ballIsBowled;
+
     @Column(name="noOfWideBalls")
     int noOfWideBalls;
+
     @Column(name="noOfBalls")
     int noOfBalls;
+
     @Column(name="ballIsFaced ")
     int ballIsFaced ;
+
     @Column(name="wicketTaken")
     int wicketTaken;
+
     @Column(name="playingStatus")
     boolean playingStatus;
 

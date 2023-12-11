@@ -6,6 +6,6 @@ import com.tekion.cricket.entity.Matches;
 
 public interface MatchesService {
     void save(Matches matches);
-    MatchResultDto playTheMatch(NewMatchDto match);
+    MatchResultDto playTheMatch(NewMatchDto match) throws InterruptedException;
 
 }
