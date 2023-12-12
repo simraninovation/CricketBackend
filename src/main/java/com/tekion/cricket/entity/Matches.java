@@ -10,6 +10,7 @@ import javax.persistence.*;
 @Entity
 @Table(name ="Matches")
 public class Matches {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
      Long matchId;

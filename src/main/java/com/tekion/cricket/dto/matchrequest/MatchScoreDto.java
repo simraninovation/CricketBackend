@@ -5,10 +5,15 @@ import lombok.*;
 @Data
 public class MatchScoreDto {
     private int wicket;
+
     private int extraRun;
+
     private int totalScores;
+
     private int runs;
+
     private int OverTillNow;
+
     private int totalWickets;
     public MatchScoreDto(){
         this.wicket = 0;

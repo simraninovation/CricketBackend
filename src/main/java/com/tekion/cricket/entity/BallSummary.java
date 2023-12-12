@@ -14,6 +14,7 @@ import javax.persistence.*;
 @Entity
 @Table(name ="ballSummary")
 public class BallSummary {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     Long Id;
@@ -31,6 +32,5 @@ public class BallSummary {
     @ManyToOne
     @JoinColumn(name="inningId",referencedColumnName = "inningId",nullable = false)
     private Innings inning;
-
 
 }

@@ -15,9 +15,11 @@ import java.util.Objects;
 @Entity
 @Table(name ="Players")
 public class Players {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     Long Id;
+
     @Column(name = "firstName")
     private String firstName;
 
@@ -33,9 +35,8 @@ public class Players {
     @Column(name ="PlayerType")
     private String playerType;
 
-     @ManyToOne
+    @ManyToOne
     @JoinColumn(name="teamId", nullable = false)
-      private Team team;
-
+    private Team team;
 
 }

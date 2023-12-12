@@ -46,6 +46,4 @@ public class Innings {
     @JoinColumn(name="matchId",referencedColumnName = "matchId",nullable = false)
     private Matches matches;
 
-
-
 }

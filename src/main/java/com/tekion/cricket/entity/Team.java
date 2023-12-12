@@ -18,6 +18,7 @@ import java.util.Set;
 @Entity
 @Table(name ="Team")
 public class Team {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     Long teamId;

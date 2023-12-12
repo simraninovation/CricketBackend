@@ -14,36 +14,27 @@ import javax.persistence.*;
 @Entity
 @Table(name ="Scoreboard")
 public class Scoreboard {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    Long scoreboardId;
-    @Column(name="zero")
-    int zero;
-    @Column(name="one")
-    int one;
-    @Column(name="two")
-    int two;
-    @Column(name="three")
-    int three;
-    @Column(name="four")
-    int four;
-    @Column(name="five")
-    int five;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    @Column(name="six")
-    int six;
-    @Column(name="extraRun")
-    int extraRun;
+    @Column(name="totalRuns")
+    private Integer totalRuns;
 
-    @Column(name="wicket")
-    int wicket;
+    @Column(name="totalWickets")
+    private Integer totalWickets;
+
+    @Column(name="oversBowled")
+    private Integer oversBowled;
+
+    @Column(name="result")
+    private String result;
+
+    @Column(name="matchId")
+    private Long matchId;
+
     @OneToOne
-    @JoinColumn(name="playerId",referencedColumnName = "Id")
-    private Players players;
-
-    @ManyToOne
-    @JoinColumn(name="matchId",referencedColumnName = "matchId",nullable = false)
-    private Matches matches;
-
-
+    @JoinColumn(name="inningId",referencedColumnName = "inningId",nullable = false)
+    private Innings innings;
 }

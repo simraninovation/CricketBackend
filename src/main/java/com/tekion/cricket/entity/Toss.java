@@ -15,9 +15,11 @@ import java.util.Objects;
 @Entity
 @Table(name ="Toss")
 public class Toss {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     Long tossId;
+
     @Column(name="teamIdWonToss")
     Long teamIdWonToss;
 
@@ -29,6 +31,7 @@ public class Toss {
 
     @Column(name="tossOutcome")
     String tossOutcome;
+
     @OneToOne
     @JoinColumn(name="matchId",referencedColumnName = "matchId")
     private Matches matches;
