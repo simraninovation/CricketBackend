@@ -6,5 +6,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface TossRepository extends JpaRepository<Toss,Long> {
+
     Toss getTossByMatches_MatchId(Long id);
 }

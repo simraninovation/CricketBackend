@@ -15,6 +15,7 @@ import java.util.List;
 public class ScheduledMatchController {
     @Autowired
      private ScheduledMatchService scheduledMatchService;
+
     @PostMapping("/add")
     public ResponseEntity<ScheduledMatch> scheduleMatch(@RequestBody ScheduledMatchDto scheduledMatchDto){
         ScheduledMatch scheduledMatch = scheduledMatchService.scheduleMatch(scheduledMatchDto);
@@ -26,6 +27,7 @@ public class ScheduledMatchController {
         List<ScheduledMatch> scheduledMatches = scheduledMatchService.getAll();
         return new ResponseEntity<>(scheduledMatches,HttpStatus.OK);
     }
+
     @GetMapping("/{teamId}")
     public ResponseEntity<List<ScheduledMatch>> getScheduledMatchByTeamId(Long teamId){
         List<ScheduledMatch> scheduledMatches = scheduledMatchService.getScheduledMatchesByTeamId(teamId);

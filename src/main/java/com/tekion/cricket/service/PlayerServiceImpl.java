@@ -13,27 +13,32 @@ import java.util.Optional;
 public   class PlayerServiceImpl implements PlayerService{
     @Autowired
     private PlayerRepository playerRepository;
+
     @Override
     public List<Players> getTeamPlayer(Long teamId) {
 
         List<Players> listOfPlayers = playerRepository.findPlayerByTeamTeamId(teamId);
          return  listOfPlayers;
     }
+
     @Override
     public Players save(Players player) {
 
         return playerRepository.save(player);
     }
+
     @Override
     public List<Players> getAllPlayer() {
         return playerRepository.findAll();
     }
+
 
     @Override
     public Players getPlayerById(Long Id) {
         Optional<Players> optionalPlayers = playerRepository.findById(Id);
         return optionalPlayers.orElse(null);
     }
+
     @Override
     public List<Players> getSpecificTeamById(Long teamId) {
 

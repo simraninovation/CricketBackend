@@ -15,21 +15,25 @@ import java.util.List;
 public class PlayerController {
     @Autowired
     private PlayerService playerService;
+
     @PostMapping("/createPlayer")
     public ResponseEntity<Players> savePlayerDetails(@RequestBody Players players){
         Players savedPlayer = playerService.save(players);
         return new ResponseEntity<>(savedPlayer, HttpStatus.CREATED);
     }
+
     @GetMapping("/getPlayerById/{id}")
     public ResponseEntity<Players> getPlayerById(@PathVariable("id") Long Id){
         Players playerId = playerService.getPlayerById(Id);
         return new ResponseEntity<>(playerId, HttpStatus.OK);
     }
+
     @GetMapping("/AllPlayersDetails")
     public ResponseEntity<List<Players>> getAllTeams() {
         List<Players> playersDetails = playerService.getAllPlayer();
         return new ResponseEntity<>(playersDetails, HttpStatus.OK);
     }
+
     @GetMapping("/{teamId}/players")
     @ResponseBody
     public ResponseEntity<List<Players>> getTeamPlayer(@PathVariable  Long teamId){

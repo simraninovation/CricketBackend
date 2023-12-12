@@ -16,11 +16,13 @@ public class PlayerStatsServiceImpl implements PlayerStatsService{
     public List<PlayerStats> getAll(){
         return playerStatsRepository.findAll();
     }
+
     @Override
     public List<PlayerStats> getPlayerStatsByMatchId(Long matchId){
         List<PlayerStats> playerStats = playerStatsRepository.findPlayerStatsByMatches_MatchId(matchId);
         return playerStats;
     }
+
     @Override
     public List<PlayerStats> getPlayerStatsByPlayerId(Long playerId){
         List<PlayerStats> playerStats = playerStatsRepository.getPlayerStatsByPlayerStatsId(playerId);

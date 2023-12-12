@@ -10,5 +10,6 @@ import java.util.List;
 @Repository
 public interface InningsRepository extends JpaRepository<Innings, Long> {
     List<Innings> getInningsByMatches_MatchId(Long id);
+
     List<Innings> findByBallingTeamIdOrBallingTeamId(Long id1,Long id2);
 }

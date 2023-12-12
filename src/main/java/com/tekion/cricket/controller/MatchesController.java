@@ -14,11 +14,13 @@ import org.springframework.web.bind.annotation.*;
 public class MatchesController {
     @Autowired
     private MatchesService matchesService;
+
     @PostMapping("/play")
     public ResponseEntity<MatchResultDto> playTheMatch(@RequestBody NewMatchDto match) throws InterruptedException {
         MatchResultDto matchResultDto = matchesService.playTheMatch(match);
         return new ResponseEntity<>(matchResultDto, HttpStatus.OK);
     }
+
     @GetMapping("/getMatchDetails/{id}")
     public ResponseEntity<Matches> getMatchDetailsById(@PathVariable Long id) throws InterruptedException {
         Matches matches = matchesService.getMatchDetailsById(id);

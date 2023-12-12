@@ -9,6 +9,7 @@ import java.util.List;
 
 @Service
 public class TossServiceImpl implements TossService {
+
     @Autowired
     private TossRepository tossRepository;
 
@@ -16,6 +17,7 @@ public class TossServiceImpl implements TossService {
     public List<Toss> getAll(){
         return tossRepository.findAll();
     }
+
     @Override
     public Toss getTossResultByMatchId(Long matchId) {
         Toss toss = tossRepository.getTossByMatches_MatchId(matchId);

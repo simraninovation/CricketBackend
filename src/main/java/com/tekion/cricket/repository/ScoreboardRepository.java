@@ -9,5 +9,6 @@ import java.util.List;
 
 @Repository
 public interface ScoreboardRepository extends JpaRepository<Scoreboard, Long> {
+
     List<Scoreboard> findScoreboardByMatchId(Long id);
 }

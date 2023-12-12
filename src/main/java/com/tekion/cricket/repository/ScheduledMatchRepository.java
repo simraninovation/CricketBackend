@@ -10,5 +10,6 @@ import java.util.List;
 @Repository
 public interface ScheduledMatchRepository extends JpaRepository<ScheduledMatch, Long> {
     List<ScheduledMatch> findByTeamAOrTeamB(Long id1, Long id2);
+
     ScheduledMatch findByTeamAAndTeamBAndAndMatchStatus(Long id1,Long id2,String matchStatus);
 }

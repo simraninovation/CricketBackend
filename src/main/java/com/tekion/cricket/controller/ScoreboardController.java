@@ -15,6 +15,7 @@ import java.util.List;
 public class ScoreboardController {
     @Autowired
     public ScoreboardService scoreBoardService;
+
     @GetMapping("/getScoreboardByMatchId/{id}")
     public ResponseEntity<List<Scoreboard>> getScoreBoardByMatchId(@PathVariable("id") Long Id){
         List<Scoreboard> scoreboard = scoreBoardService.getScoreBoardByMatchId(Id);

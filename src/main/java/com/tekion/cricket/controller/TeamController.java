@@ -19,21 +19,25 @@ public class TeamController {
     private TeamService teamService;
     @Autowired
     private PlayerService playerService;
+
     @PostMapping("/createTeam")
     public ResponseEntity<Team> createTeam(@RequestBody Team team) {
         Team savedTeam = teamService.save(team);
         return new ResponseEntity<>(savedTeam, HttpStatus.CREATED);
     }
+
     @GetMapping("/allTeams")
     public ResponseEntity<List<Team>> getAllTeams() {
         List<Team> teamsDetails = teamService.getAllTeams();
         return new ResponseEntity<>(teamsDetails, HttpStatus.OK);
     }
+
     @GetMapping("/specificTeamDetails/{id}")
     public ResponseEntity<List<Players>> getSpecificTeamById(@PathVariable("id") Long teamId) {
         List<Players> teamDetailSById = playerService.getSpecificTeamById(teamId);
         return new ResponseEntity<>(teamDetailSById, HttpStatus.OK);
     }
+
     @DeleteMapping("{id}")
     public ResponseEntity<String> deleteUser(@PathVariable("id") Long teamId) {
         teamService.deleteTeam(teamId);

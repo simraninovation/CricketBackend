@@ -9,6 +9,7 @@ import java.util.Optional;
 
 @Repository
 public interface TeamRepository extends JpaRepository<Team, Long> {
+
     List<Team> findAll();
 
 }

@@ -9,8 +9,10 @@ import java.util.List;
 
 @Service
 public class ScoreboardServiceImpl implements ScoreboardService{
+
     @Autowired
     private ScoreboardRepository scoreboardRepository;
+
     @Override
     public List<Scoreboard> getScoreBoardByMatchId(Long id){
         List<Scoreboard> scoreboards = scoreboardRepository.findScoreboardByMatchId(id);

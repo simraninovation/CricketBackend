@@ -9,18 +9,22 @@ import java.util.List;
 
 @Service
 public class TeamServiceImpl implements TeamService {
+
     @Autowired
     private TeamRepository teamRepository;
+
     @Override
     public Team save(Team team) {
 
         return teamRepository.save(team);
     }
+
     @Override
     public List<Team> getAllTeams() {
         List<Team>  listOfTeams =  teamRepository.findAll();
         return listOfTeams;
     }
+
     @Override
     public void deleteTeam(Long teamId) {
         teamRepository.deleteById(teamId);

@@ -13,10 +13,13 @@ import java.util.List;
 
 @Service
 public class ScheduledMatchServiceImpl implements ScheduledMatchService {
+
     @Autowired
     private ScheduledMatchRepository scheduledMatchRepository;
+
     @Autowired
     TeamRepository teamRepository;
+
     @Override
     public ScheduledMatch scheduleMatch(ScheduledMatchDto scheduledMatchDto) {
         Team teamA = teamRepository.getById(scheduledMatchDto.getTeamAId());
@@ -35,10 +38,12 @@ public class ScheduledMatchServiceImpl implements ScheduledMatchService {
         return null;
 
     }
+
     @Override
     public List<ScheduledMatch> getAll() {
         return scheduledMatchRepository.findAll();
     }
+
     @Override
     public List<ScheduledMatch> getScheduledMatchesByTeamId(Long teamId) {
         return scheduledMatchRepository.findByTeamAOrTeamB(teamId, teamId);

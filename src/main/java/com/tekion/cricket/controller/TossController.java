@@ -23,6 +23,7 @@ public class TossController {
         List<Toss> result = tossService.getAll();
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
+
     @GetMapping("/perform/toss/{matchId}")
     public ResponseEntity<Toss> getTossResultByMatchId(@PathVariable Long matchId ) {
         Toss result = tossService.getTossResultByMatchId(matchId);

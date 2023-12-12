@@ -18,18 +18,25 @@ import java.util.*;
 public class MatchesServiceImpl implements MatchesService {
     @Autowired
     private MatchesRepository matchesRepository;
+
     @Autowired
     private TeamRepository teamRepository;
+
     @Autowired
     private InningsRepository inningsRepository;
+
     @Autowired
     private TossRepository tossRepository;
+
     @Autowired
     private PlayerStatsRepository playerStatsRepository;
+
     @Autowired
     private BallSummaryRepository ballSummaryRepository;
+
     @Autowired
     private ScheduledMatchRepository scheduledMatchRepository;
+
     @Autowired
     private ScoreboardRepository scoreboardRepository;
 
@@ -218,6 +225,7 @@ public class MatchesServiceImpl implements MatchesService {
         scoreboard.setOversBowled(Math.toIntExact(secondInningsDetails.getNoOfNoBalls()));
         scoreboardRepository.save(scoreboard);
     }
+
     @Override
     public Matches getMatchDetailsById(Long id){
         Matches matches = matchesRepository.getById(id);

@@ -14,6 +14,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/innings")
 public class InningsController {
+
     @Autowired
     InningsService inningsService;
 
@@ -22,11 +23,13 @@ public class InningsController {
         List<Innings> innings = inningsService.getAll();
         return new ResponseEntity<>(innings, HttpStatus.OK);
     }
+
     @GetMapping("/{matchId}")
     public ResponseEntity<List<Innings>> getInningsByMatchId(@PathVariable Long matchId){
         List<Innings> innings = inningsService.getInningsByMatchIds(matchId);
         return new ResponseEntity<>(innings, HttpStatus.OK);
     }
+
     @GetMapping("/team/{teamId}")
     public ResponseEntity<List<Innings>> getAllInningsByTeamId(@PathVariable Long teamId){
         List<Innings> innings = inningsService.getAllInningsByTeamId(teamId);

@@ -23,11 +23,13 @@ public class PlayerStatsController {
         List<PlayerStats> result = playerStatsService.getAll();
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
+
     @GetMapping("/match/{matchId}")
     public ResponseEntity<List<PlayerStats>> getPlayerStatsByMatchId(@PathVariable Long matchId){
         List<PlayerStats> playerStats = playerStatsService.getPlayerStatsByMatchId(matchId);
         return new ResponseEntity<>(playerStats, HttpStatus.OK);
     }
+
     @GetMapping("/{playerId}")
     public ResponseEntity<List<PlayerStats>> getPlayerStatsByPlayerId(@PathVariable Long playerId){
         List<PlayerStats> playerStats = playerStatsService.getPlayerStatsByPlayerId(playerId);
