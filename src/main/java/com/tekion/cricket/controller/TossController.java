@@ -18,13 +18,13 @@ public class TossController {
     @Autowired
     private TossService tossService;
 
-    @GetMapping("/all")
+    @GetMapping("/")
     public ResponseEntity<List<Toss>> getAll() {
         List<Toss> result = tossService.getAll();
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
-    @GetMapping("/perform/toss/{matchId}")
+    @GetMapping("/perform/{matchId}")
     public ResponseEntity<Toss> getTossResultByMatchId(@PathVariable Long matchId ) {
         Toss result = tossService.getTossResultByMatchId(matchId);
         return new ResponseEntity<>(result, HttpStatus.OK);

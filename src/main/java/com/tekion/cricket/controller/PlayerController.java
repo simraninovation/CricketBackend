@@ -22,7 +22,7 @@ public class PlayerController {
         return new ResponseEntity<>(savedPlayer, HttpStatus.CREATED);
     }
 
-    @GetMapping("/getPlayerById/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<Players> getPlayerById(@PathVariable("id") Long Id){
         Players playerId = playerService.getPlayerById(Id);
         return new ResponseEntity<>(playerId, HttpStatus.OK);
@@ -34,7 +34,7 @@ public class PlayerController {
         return new ResponseEntity<>(playersDetails, HttpStatus.OK);
     }
 
-    @GetMapping("/{teamId}/players")
+    @GetMapping("/{teamId}")
     @ResponseBody
     public ResponseEntity<List<Players>> getTeamPlayer(@PathVariable  Long teamId){
         List<Players> listOfPlayers = playerService.getTeamPlayer(teamId);

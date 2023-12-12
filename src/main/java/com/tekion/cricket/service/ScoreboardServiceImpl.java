@@ -15,7 +15,6 @@ public class ScoreboardServiceImpl implements ScoreboardService{
 
     @Override
     public List<Scoreboard> getScoreBoardByMatchId(Long id){
-        List<Scoreboard> scoreboards = scoreboardRepository.findScoreboardByMatchId(id);
-        return scoreboards;
+        return scoreboardRepository.findScoreboardByMatchId(id);
     }
 }

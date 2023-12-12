@@ -17,8 +17,7 @@ public   class PlayerServiceImpl implements PlayerService{
     @Override
     public List<Players> getTeamPlayer(Long teamId) {
 
-        List<Players> listOfPlayers = playerRepository.findPlayerByTeamTeamId(teamId);
-         return  listOfPlayers;
+        return playerRepository.findPlayerByTeamTeamId(teamId);
     }
 
     @Override

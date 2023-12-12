@@ -21,8 +21,8 @@ public class MatchesController {
         return new ResponseEntity<>(matchResultDto, HttpStatus.OK);
     }
 
-    @GetMapping("/getMatchDetails/{id}")
-    public ResponseEntity<Matches> getMatchDetailsById(@PathVariable Long id) throws InterruptedException {
+    @GetMapping("/{id}")
+    public ResponseEntity<Matches> getMatchDetailsById(@PathVariable Long id) {
         Matches matches = matchesService.getMatchDetailsById(id);
         return new ResponseEntity<>(matches, HttpStatus.OK);
     }

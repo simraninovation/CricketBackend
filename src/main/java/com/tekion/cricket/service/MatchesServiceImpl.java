@@ -51,17 +51,17 @@ public class MatchesServiceImpl implements MatchesService {
         List<BallSummary> ballSummaries = new ArrayList<>();
         List<PlayerStats> playerStats = new ArrayList<>();
 
-        MatchScoreDto matchSocreDto = ScorecardGenerator.battingStats(oversForAMatch, teamA, ballSummaries, playerStats, targetScore);
+        MatchScoreDto matchScoreDto = ScorecardGenerator.battingStats(oversForAMatch, teamA, ballSummaries, playerStats, targetScore);
 
-        ScorecardGenerator.bowlingStats(oversForAMatch, teamB, matchSocreDto, playerStats);
+        ScorecardGenerator.bowlingStats(oversForAMatch, teamB, matchScoreDto, playerStats);
 
-        inningsDetails.setWicketsFallen((long) matchSocreDto.getWicket());
+        inningsDetails.setWicketsFallen((long) matchScoreDto.getWicket());
         inningsDetails.setExtraRuns(0L);
-        inningsDetails.setTotalScore((long) matchSocreDto.getTotalScores());
+        inningsDetails.setTotalScore((long) matchScoreDto.getTotalScores());
         inningsDetails.setBallingTeamId(teamB.getTeamId());
         inningsDetails.setBattingTeamId(teamA.getTeamId());
         inningsDetails.setNoOfNoBalls(0L);
-        inningsDetails.setNoOfWideBalls((long) matchSocreDto.getOverTillNow());
+        inningsDetails.setNoOfWideBalls((long) matchScoreDto.getOverTillNow());
         inningsDetails.setInnStatus(1L);
         response.put("inningsDetails", inningsDetails);
         response.put("playerStats", playerStats);
@@ -169,7 +169,8 @@ public class MatchesServiceImpl implements MatchesService {
 
         Innings innings1 = inningsRepository.save(firstInningsDetails);
         Innings innings2 = inningsRepository.save(secondInningsDetails);
-        updateScoreboard(matchesRes, innings1, result, firstInningsDetails, innings2, secondInningsDetails);
+        updateScoreboard(matchesRes, innings1, result, firstInningsDetails);
+        updateScoreboard(matchesRes, innings2, result, secondInningsDetails);
 
         for (PlayerStats playerStat : teamAPlayerStats) {
             playerStat.setMatches(matchesRes);
@@ -206,7 +207,7 @@ public class MatchesServiceImpl implements MatchesService {
     }
 
 
-    private void updateScoreboard(Matches matchesRes, Innings innings1, String result, Innings firstInningsDetails, Innings innings2, Innings secondInningsDetails) {
+    private void updateScoreboard(Matches matchesRes, Innings innings1, String result, Innings firstInningsDetails) {
         Scoreboard scoreboard = new Scoreboard();
         scoreboard.setMatchId(matchesRes.getMatchId());
         scoreboard.setInnings(innings1);
@@ -216,19 +217,10 @@ public class MatchesServiceImpl implements MatchesService {
         scoreboard.setOversBowled(Math.toIntExact(firstInningsDetails.getNoOfNoBalls()));
         scoreboardRepository.save(scoreboard);
 
-        scoreboard = new Scoreboard();
-        scoreboard.setMatchId(matchesRes.getMatchId());
-        scoreboard.setResult(result);
-        scoreboard.setInnings(innings2);
-        scoreboard.setTotalRuns(Math.toIntExact(secondInningsDetails.getTotalScore()));
-        scoreboard.setTotalWickets(Math.toIntExact(secondInningsDetails.getWicketsFallen()));
-        scoreboard.setOversBowled(Math.toIntExact(secondInningsDetails.getNoOfNoBalls()));
-        scoreboardRepository.save(scoreboard);
     }
 
     @Override
     public Matches getMatchDetailsById(Long id){
-        Matches matches = matchesRepository.getById(id);
-        return matches;
+        return matchesRepository.getById(id);
     }
 }

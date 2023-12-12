@@ -12,7 +12,7 @@ public class MatchScoreDto {
 
     private int runs;
 
-    private int OverTillNow;
+    private int overTillNow;
 
     private int totalWickets;
     public MatchScoreDto(){
@@ -20,7 +20,7 @@ public class MatchScoreDto {
         this.extraRun = 0;
         this.totalScores = 0;
         this.runs = 0;
-        this.OverTillNow = 0;
+        this.overTillNow = 0;
         this.totalWickets = 0;
 
     }

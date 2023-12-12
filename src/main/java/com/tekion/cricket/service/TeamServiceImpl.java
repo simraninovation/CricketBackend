@@ -1,5 +1,6 @@
 package com.tekion.cricket.service;
 
+import com.tekion.cricket.dto.team.TeamDto;
 import com.tekion.cricket.entity.Team;
 import com.tekion.cricket.repository.TeamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,15 +15,17 @@ public class TeamServiceImpl implements TeamService {
     private TeamRepository teamRepository;
 
     @Override
-    public Team save(Team team) {
-
-        return teamRepository.save(team);
+    public Team save(TeamDto team) {
+        Team teamS = new Team();
+        teamS.setTeamId(team.getId());
+        teamS.setTeamName(team.getTeamName());
+        teamS.setCountry(team.getCountry());
+        return teamRepository.save(teamS);
     }
 
     @Override
     public List<Team> getAllTeams() {
-        List<Team>  listOfTeams =  teamRepository.findAll();
-        return listOfTeams;
+        return teamRepository.findAll();
     }
 
     @Override

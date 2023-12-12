@@ -20,8 +20,7 @@ public class TossServiceImpl implements TossService {
 
     @Override
     public Toss getTossResultByMatchId(Long matchId) {
-        Toss toss = tossRepository.getTossByMatches_MatchId(matchId);
-        return toss;
+        return tossRepository.getTossByMatches_MatchId(matchId);
     }
 
 }

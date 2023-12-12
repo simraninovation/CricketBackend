@@ -1,5 +1,6 @@
 package com.tekion.cricket.controller;
 
+import com.tekion.cricket.dto.team.TeamDto;
 import com.tekion.cricket.entity.Players;
 import com.tekion.cricket.entity.Team;
 
@@ -20,19 +21,19 @@ public class TeamController {
     @Autowired
     private PlayerService playerService;
 
-    @PostMapping("/createTeam")
-    public ResponseEntity<Team> createTeam(@RequestBody Team team) {
+    @PostMapping("/")
+    public ResponseEntity<Team> createTeam(@RequestBody TeamDto team) {
         Team savedTeam = teamService.save(team);
         return new ResponseEntity<>(savedTeam, HttpStatus.CREATED);
     }
 
-    @GetMapping("/allTeams")
+    @GetMapping("/")
     public ResponseEntity<List<Team>> getAllTeams() {
         List<Team> teamsDetails = teamService.getAllTeams();
         return new ResponseEntity<>(teamsDetails, HttpStatus.OK);
     }
 
-    @GetMapping("/specificTeamDetails/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<List<Players>> getSpecificTeamById(@PathVariable("id") Long teamId) {
         List<Players> teamDetailSById = playerService.getSpecificTeamById(teamId);
         return new ResponseEntity<>(teamDetailSById, HttpStatus.OK);

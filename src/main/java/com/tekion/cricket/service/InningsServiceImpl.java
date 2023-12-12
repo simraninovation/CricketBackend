@@ -19,14 +19,12 @@ public class InningsServiceImpl implements InningsService {
 
     @Override
     public List<Innings> getInningsByMatchIds(Long matchId) {
-        List<Innings> innings = inningsRepository.getInningsByMatches_MatchId(matchId);
-        return innings;
+        return inningsRepository.getInningsByMatches_MatchId(matchId);
     }
 
     @Override
     public List<Innings> getAllInningsByTeamId(Long teamId){
-        List<Innings> innings = inningsRepository.findByBallingTeamIdOrBallingTeamId(teamId,teamId);
-        return  innings;
+        return inningsRepository.findByBallingTeamIdOrBallingTeamId(teamId,teamId);
     }
 
 }

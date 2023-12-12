@@ -6,12 +6,12 @@ import com.tekion.cricket.service.ScheduledMatchService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@RestController
+@RequestMapping("/scheduled")
 public class ScheduledMatchController {
     @Autowired
      private ScheduledMatchService scheduledMatchService;
@@ -22,7 +22,7 @@ public class ScheduledMatchController {
         return new ResponseEntity<>(scheduledMatch, HttpStatus.OK);
     }
 
-    @GetMapping
+    @GetMapping("/")
     public ResponseEntity<List<ScheduledMatch>> getAll(){
         List<ScheduledMatch> scheduledMatches = scheduledMatchService.getAll();
         return new ResponseEntity<>(scheduledMatches,HttpStatus.OK);

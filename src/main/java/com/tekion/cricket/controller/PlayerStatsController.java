@@ -18,7 +18,7 @@ public class PlayerStatsController {
     @Autowired
     private PlayerStatsService playerStatsService;
 
-    @GetMapping("/all")
+    @GetMapping("/")
     public ResponseEntity<List<PlayerStats>> getAll() {
         List<PlayerStats> result = playerStatsService.getAll();
         return new ResponseEntity<>(result, HttpStatus.OK);
